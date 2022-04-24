@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 
+var videoApiRoute = require('./api/video-api');
+
 app.get("/", (req, res) => {
   res.send("Assignment Canvas v2 API");
 })
