@@ -20,7 +20,7 @@ router.get("/", async (req, res) => {
     console.log(error.response.status)
     if(error.response.status === 401) {
       let errorID = uuidv4()
-      log.logError(errorID, "TODO add userID", error)
+      await log.logError(errorID, "TODO add userID", error)
       res.send({
         message: "api key unauthorized",
         errorID: errorID,
@@ -29,7 +29,7 @@ router.get("/", async (req, res) => {
     }
     else {
       let errorID = uuidv4()
-      log.logError(errorID, "TODO add userID", error)
+      await log.logError(errorID, "TODO add userID", error)
 
       res.send({
         message: `canvas api returned code ${error.response.status}`,

@@ -1,0 +1,5 @@
+{
+  "unsecured-endpoints": [
+    "/internal/users/new"
+  ]
+}
