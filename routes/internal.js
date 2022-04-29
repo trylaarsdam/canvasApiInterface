@@ -15,13 +15,13 @@ router.post("/users/new", async (req, res) => {
   const userID = uuidv4()
 
   if(!name || !email) {
-    res.send({
+    res.status(400).send({
       message: "missing required parameters",
       status: "error"
     })
   } else {
     if((await db.query("User", "email", "==", email)).length > 0) {
-      res.send({
+      res.status(418).send({
         message: "email already exists",
         status: "error"
       })
@@ -46,7 +46,16 @@ router.post("/users/new", async (req, res) => {
 
 router.get("/users/get", async (req, res) => {
   const userID = req.query.id
+  const user = await db.getDoc("User", userID)
 
+  if(user) {
+    
+  } else {
+    res.send({
+      message: "user not found",
+      status: "error"
+    })
+  }
   res.send("not implemented")
 })
 
