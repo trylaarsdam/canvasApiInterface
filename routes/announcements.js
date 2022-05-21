@@ -8,14 +8,16 @@ axios.defaults.headers.common = {'Authorization': `Bearer ${dev.token}`}
 
 router.get("/", async (req, res) => {
   var courseString = "?"
-  let courses = []
+  let courses = {}
   //Get courses
   try {
 
     const courseResults = await axios.get(`http://${dev.ip}/api/v1/courses`)
 
     if(courseResults.status === 200) {
-      courses = courseResults.data
+      for(var course of courseResults.data) {
+        courses[course.id] = course
+      }
 
       for(var course in courses) {
         courseString += `context_codes[]=course_${courses[course].id}&`
@@ -53,6 +55,7 @@ router.get("/", async (req, res) => {
     if(canvasResults.status === 200) {
       for(var announcement in canvasResults.data) {
         canvasResults.data[announcement].course = courses[canvasResults.data[announcement].context_code.split("_")[1]]
+        
       }
 
       res.send({
