@@ -7,11 +7,36 @@ const log = require("../internal/logging")
 const db = require("../internal/database")
 const crypto = require("crypto")
 
+router.get("/users/test", async (req, res) => {
+  const canvasURL = req.query.canvasURL
+  const canvasKey = req.query.canvasKey
+  
+  try {
+    const canvasResults = await axios.get(`https://${canvasURL}/api/v1/courses`, {
+      headers: {
+        'Authorization': `Bearer ${canvasKey}`
+      }
+    })
+
+    if(canvasResults.status === 200) {
+      res.send({
+        status: "success"
+      })
+    }
+  } catch (error) {
+    res.send({
+      status: "error"
+    })
+  }
+})
+
 router.post("/users/new", async (req, res) => {
   const name = req.query.name
   const email = req.query.email
   const canvasKey = req.query.canvasKey
   const password = req.query.password
+  const canvasURL = req.query.canvasURL
+
   const userID = uuidv4()
 
   if(!name || !email) {
