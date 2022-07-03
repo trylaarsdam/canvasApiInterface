@@ -3,7 +3,8 @@ const config = require("../auth.config.json")
 const db = require("./database")
 
 async function auth(req, res, next) {
-  // make authenticate path public
+  // make authenticate path public'
+  // console.log(req.path)
   if(config["unsecured-endpoints"].includes(req.path)) {
     return next();
   }

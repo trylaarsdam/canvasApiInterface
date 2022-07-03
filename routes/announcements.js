@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
   //Get courses
   try {
 
-    const courseResults = await axios.get(`http://${req.user.canvasURL}/api/v1/courses`, {
+    const courseResults = await axios.get(`${req.user.canvasURL}/api/v1/courses`, {
       headers: {
         'Authorization': `Bearer ${req.user.canvasKey}`
       }
@@ -29,6 +29,8 @@ router.get("/", async (req, res) => {
 
     // console.log(courses)
   } catch (error) {
+    console.log("courses")
+    console.log(error.response)
     console.log(error.response.status)
     if(error.response.status === 401) {
       let errorID = uuidv4()
@@ -53,7 +55,7 @@ router.get("/", async (req, res) => {
   }
 
   try {
-    var canvasResults = await axios.get(`http://${req.user.canvasURL}/api/v1/announcements${courseString}start_date=2018-01-01&end_date=2027-01-01`, {
+    var canvasResults = await axios.get(`${req.user.canvasURL}/api/v1/announcements${courseString}start_date=2018-01-01&end_date=2027-01-01`, {
       headers: {
         'Authorization': `Bearer ${req.user.canvasKey}`
       }
@@ -71,6 +73,7 @@ router.get("/", async (req, res) => {
       })
     }
   } catch (error) {
+    console.log("announcements")
     console.log(error.response.status)
     if(error.response.status === 401) {
       let errorID = uuidv4()

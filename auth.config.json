@@ -1,6 +1,8 @@
 {
   "unsecured-endpoints": [
     "/internal/users/new",
-    "/internal/login"
+    "/internal/login",
+    "/internal/users/test",
+    "/internal/users/check"
   ]
 }

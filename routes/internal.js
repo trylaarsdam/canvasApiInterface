@@ -10,9 +10,9 @@ const crypto = require("crypto")
 router.get("/users/test", async (req, res) => {
   const canvasURL = req.query.canvasURL
   const canvasKey = req.query.canvasKey
-  
+  // console.log(canvasURL)
   try {
-    const canvasResults = await axios.get(`https://${canvasURL}/api/v1/courses`, {
+    const canvasResults = await axios.get(`${canvasURL}/api/v1/courses`, {
       headers: {
         'Authorization': `Bearer ${canvasKey}`
       }
