@@ -30,6 +30,23 @@ router.get("/users/test", async (req, res) => {
   }
 })
 
+router.get("/users/check", async (req, res) => {
+  const email = req.query.email
+
+  let results = await db.query("User", "email", "==", email)
+
+  if (results.length == 0) {
+    res.send({
+      status: "unique"
+    })
+  }
+  else {
+    res.send({
+      status: "taken"
+    })
+  }
+})
+
 router.post("/users/new", async (req, res) => {
   const name = req.query.name
   const email = req.query.email
@@ -56,14 +73,22 @@ router.post("/users/new", async (req, res) => {
         name: name,
         email: email,
         canvasKey: canvasKey,
-        password: crypto.createHash("sha256").update(password).digest("hex"),
+        canvasURL: canvasURL,
+        password: password,
         apiKey: uuidv4()
       })
   
       res.send({
         message: "user created",
         status: "success",
-        userID: userID
+        user: {
+          id: userID,
+          name: name,
+          email: email,
+          canvasKey: canvasKey,
+          canvasURL: canvasURL,
+          password: password
+        }
       })
     }
   }
