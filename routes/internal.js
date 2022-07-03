@@ -30,6 +30,33 @@ router.get("/users/test", async (req, res) => {
   }
 })
 
+router.get("/login", async (req, res) => {
+  const email = req.query.email
+  const password = req.query.password
+
+  let user = await db.query("User", "email", "==", email)
+  if(user.length === 1) {
+    if(user[0].password === crypto.createHash("sha256").update(password).digest("hex")) {
+      res.send({
+        status: "success",
+        user: user[0]
+      })
+    }
+    else {
+      res.send({
+        status: "error",
+        message: "invalid password"
+      })
+    }
+  }
+  else {
+    res.send({
+      status: "error",
+      message: "invalid email"
+    })
+  }
+})
+
 router.get("/users/check", async (req, res) => {
   const email = req.query.email
 
@@ -75,6 +102,7 @@ router.post("/users/new", async (req, res) => {
         canvasKey: canvasKey,
         canvasURL: canvasURL,
         password: password,
+        role: "User",
         apiKey: uuidv4()
       })
   
@@ -86,6 +114,7 @@ router.post("/users/new", async (req, res) => {
           name: name,
           email: email,
           canvasKey: canvasKey,
+          role: "User",
           canvasURL: canvasURL,
           password: password
         }
