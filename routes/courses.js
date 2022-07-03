@@ -4,11 +4,14 @@ var router = express.Router();
 const {v4: uuidv4} = require('uuid');
 const dev = require("../dev.json")
 const log = require("../internal/logging")
-axios.defaults.headers.common = {'Authorization': `Bearer ${dev.token}`}
 
 router.get("/", async (req, res) => {
   try {
-    const canvasResults = await axios.get(`http://${dev.ip}/api/v1/courses`)
+    const canvasResults = await axios.get(`http://${req.user.canvasURL}/api/v1/courses`, {
+      headers: {
+        'Authorization': `Bearer ${req.user.canvasKey}`
+      }
+    })
 
     if(canvasResults.status === 200) {
       res.send({
@@ -42,7 +45,11 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const canvasResults = await axios.get(`http://${dev.ip}/api/v1/courses/${req.params.id}`)
+    const canvasResults = await axios.get(`http://${req.user.canvasURL}/api/v1/courses/${req.params.id}`, {
+      headers: {
+        'Authorization': `Bearer ${req.user.canvasKey}`
+      }
+    })
 
     if(canvasResults.status === 200) {
       res.send({
@@ -76,7 +83,11 @@ router.get("/:id", async (req, res) => {
 
 router.get("/:courseID/assignments", async (req, res) => {
   try {
-    const canvasResults = await axios.get(`http://${dev.ip}/api/v1/courses/${req.params.courseID}/assignments`)
+    const canvasResults = await axios.get(`http://${req.user.canvasURL}/api/v1/courses/${req.params.courseID}/assignments`, {
+      headers: {
+        'Authorization': `Bearer ${req.user.canvasKey}`
+      }
+    })
 
     if(canvasResults.status === 200) {
       res.send({
@@ -110,7 +121,11 @@ router.get("/:courseID/assignments", async (req, res) => {
 
 router.get("/:courseID/announcements", async (req, res) => {
   try {
-    const canvasResults = await axios.get(`http://${dev.ip}/api/v1/announcements?context_codes[]=course_${req.params.courseID}&start_date=2018-01-01&end_date=2027-01-01`)
+    const canvasResults = await axios.get(`http://${req.user.canvasURL}/api/v1/announcements?context_codes[]=course_${req.params.courseID}&start_date=2018-01-01&end_date=2027-01-01`, {
+      headers: {
+        Authorization: `Bearer ${req.user.canvasKey}`
+      }
+    })
     if(canvasResults.status === 200) {
       res.send({
         data: canvasResults.data,
@@ -143,7 +158,11 @@ router.get("/:courseID/announcements", async (req, res) => {
 
 router.get("/:courseID/users", async (req, res) => {
   try {
-    const canvasResults = await axios.get(`http://${dev.ip}/api/v1/courses/${req.params.courseID}/users`)
+    const canvasResults = await axios.get(`http://${req.user.canvasURL}/api/v1/courses/${req.params.courseID}/users`, {
+      headers: {
+        'Authorization': `Bearer ${req.user.canvasKey}`
+      }
+    })
 
     if(canvasResults.status === 200) {
       res.send({

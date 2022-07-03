@@ -4,7 +4,6 @@ var router = express.Router();
 const {v4: uuidv4} = require('uuid');
 const dev = require("../dev.json")
 const log = require("../internal/logging")
-axios.defaults.headers.common = {'Authorization': `Bearer ${dev.token}`}
 
 router.get("/", async (req, res) => {
   var courseString = "?"
@@ -12,7 +11,11 @@ router.get("/", async (req, res) => {
   //Get courses
   try {
 
-    const courseResults = await axios.get(`http://${dev.ip}/api/v1/courses`)
+    const courseResults = await axios.get(`http://${req.user.canvasURL}/api/v1/courses`, {
+      headers: {
+        'Authorization': `Bearer ${req.user.canvasKey}`
+      }
+    })
 
     if(courseResults.status === 200) {
       for(var course of courseResults.data) {
@@ -50,7 +53,11 @@ router.get("/", async (req, res) => {
   }
 
   try {
-    var canvasResults = await axios.get(`http://${dev.ip}/api/v1/announcements${courseString}start_date=2018-01-01&end_date=2027-01-01`)
+    var canvasResults = await axios.get(`http://${req.user.canvasURL}/api/v1/announcements${courseString}start_date=2018-01-01&end_date=2027-01-01`, {
+      headers: {
+        'Authorization': `Bearer ${req.user.canvasKey}`
+      }
+    })
 
     if(canvasResults.status === 200) {
       for(var announcement in canvasResults.data) {

@@ -14,7 +14,7 @@ var pagesRoute = require("./routes/pages");
 var discussionsRoute = require("./routes/discussions");
  
 app.use(cors())
-// app.use(auth);
+app.use(auth);
 
 app.use("/api/courses", coursesRoute);
 app.use("/api/announcements", announcementsRoute)
