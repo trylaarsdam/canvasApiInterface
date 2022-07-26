@@ -13,13 +13,23 @@ module.exports = {
   setDoc,
   deleteDoc,
   getDoc,
-  query
+  query,
+  getCollection
 }
 
 async function setDoc(collection, doc, data) {
   try {
     await db.collection(collection).doc(doc).set(data);
   } catch (error) {
+    console.log(error);
+  }
+}
+
+async function getCollection(collection) {
+  try {
+    const query = await db.collecetion(collection).get();
+    return query.docs.map(doc => doc.data());
+  } catch(error) {
     console.log(error);
   }
 }

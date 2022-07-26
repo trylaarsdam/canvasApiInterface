@@ -128,14 +128,33 @@ router.get("/users/get", async (req, res) => {
   const user = await db.getDoc("User", userID)
 
   if(user) {
-    
+    res.send({
+      user: user,
+      status: "success"
+    })
   } else {
     res.send({
       message: "user not found",
       status: "error"
     })
   }
-  res.send("not implemented")
+  // res.send("not implemented")
+})
+
+router.get("/users", async (req, res) => {
+  const users = await db.getCollection("User")
+
+  if(users) {
+    res.send({
+      users: users,
+      status: "success"
+    })
+  } else {
+    res.send({
+      message: "error fetching users",
+      status: "error"
+    })
+  }
 })
 
 module.exports = router;
