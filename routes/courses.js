@@ -98,7 +98,7 @@ router.get("/:courseID/assignments", async (req, res) => {
         }
       })
       var results = []
-      for (var assignment of assignmentResults) {
+      for (var assignment of assignmentResults.data) {
         assignment.course = canvasResults.data
         results.push(assignment)
       }
@@ -174,7 +174,7 @@ router.get("/:courseID/announcements", async (req, res) => {
         }
       })
       var results = []
-      for (var result of canvasResults) {
+      for (var result of canvasResults.data) {
         result.course = courseResults.data
         results.push(result)
       }
