@@ -158,7 +158,7 @@ router.get("/users", async (req, res) => {
 })
 
 router.get("/errors", async (req, res) => {
-  const users = await db.getCollection("Error")
+  const users = await db.getCollection("Errors")
 
   if(users) {
     res.send({
