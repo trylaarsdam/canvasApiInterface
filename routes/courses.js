@@ -114,7 +114,7 @@ router.get("/:courseID/assignments", async (req, res) => {
         })
       }
     } catch (error) {
-      console.log(error.response.status)
+      console.log(error)
       if(error.response.status === 401) {
         let errorID = uuidv4()
         await log.logError(errorID, req.user.id, error)
