@@ -124,50 +124,69 @@ router.post("/users/new", async (req, res) => {
 })
 
 router.get("/users/get", async (req, res) => {
-  const userID = req.query.id
-  const user = await db.getDoc("User", userID)
+  if(req.user.id == req.query.id || req.user.role == "Administrator") {
+    const userID = req.query.id
+    const user = await db.getDoc("User", userID)
 
-  if(user) {
-    res.send({
-      user: user,
-      status: "success"
-    })
+    if(user) {
+      res.send({
+        user: user,
+        status: "success"
+      })
+    } else {
+      res.send({
+        message: "user not found",
+        status: "error"
+      })
+    }
   } else {
-    res.send({
-      message: "user not found",
+    req.status(401).send({
+      message: "requires administrator privilages",
       status: "error"
     })
   }
-  // res.send("not implemented")
 })
 
 router.get("/users", async (req, res) => {
-  const users = await db.getCollection("User")
-
-  if(users) {
-    res.send({
-      users: users,
-      status: "success"
-    })
+  if(req.user.role == "Administrator") {
+    const users = await db.getCollection("User")
+    if(users) {
+      res.send({
+        users: users,
+        status: "success"
+      })
+    } else {
+      res.send({
+        message: "error fetching users",
+        status: "error"
+      })
+    }
   } else {
-    res.send({
-      message: "error fetching users",
+    req.status(401).send({
+      message: "requires administrator privilages",
       status: "error"
     })
   }
 })
 
 router.get("/errors", async (req, res) => {
-  const users = await db.getCollection("Errors")
+  if(req.user.role) {
+    const users = await db.getCollection("Errors")
 
-  if(users) {
-    res.send({
-      users: users,
-      status: "success"
-    })
+    if(users) {
+      res.send({
+        users: users,
+        status: "success"
+      })
+    } else {
+      res.send({
+        message: "error fetching users",
+        status: "error"
+      })
+    }
   } else {
-    res.send({
-      message: "error fetching users",
+    req.status(401).send({
+      message: "requires administrator privilages",
       status: "error"
     })
   }
