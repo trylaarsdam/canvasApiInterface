@@ -162,16 +162,49 @@ router.get("/:courseID/assignments", async (req, res) => {
 
 router.get("/:courseID/announcements", async (req, res) => {
   try {
-    const canvasResults = await axios.get(`${req.user.canvasURL}/api/v1/announcements?context_codes[]=course_${req.params.courseID}&start_date=2018-01-01&end_date=2027-01-01`, {
+    const courseResults = await axios.get(`${req.user.canvasURL}/api/v1/courses/${req.params.courseID}`, {
       headers: {
-        Authorization: `Bearer ${req.user.canvasKey}`
+        'Authorization': `Bearer ${req.user.canvasKey}`
       }
     })
-    if(canvasResults.status === 200) {
-      res.send({
-        data: canvasResults.data,
-        status: "success"
+    try {
+      const canvasResults = await axios.get(`${req.user.canvasURL}/api/v1/announcements?context_codes[]=course_${req.params.courseID}&start_date=2018-01-01&end_date=2027-01-01`, {
+        headers: {
+          Authorization: `Bearer ${req.user.canvasKey}`
+        }
       })
+      var results = []
+      for (var result of canvasResults) {
+        result.course = canvasResults.data
+        results.push(result)
+      }
+      if(canvasResults.status === 200) {
+        res.send({
+          data: results,
+          status: "success"
+        })
+      }
+    } catch (error) {
+      console.log(error.response.status)
+      if(error.response.status === 401) {
+        let errorID = uuidv4()
+        await log.logError(errorID, req.user.id, error)
+        res.send({
+          message: "api key unauthorized",
+          errorID: errorID,
+          status: "error"
+        })
+      }
+      else {
+        let errorID = uuidv4()
+        await log.logError(errorID, req.user.id, error)
+
+        res.send({
+          message: `canvas api returned code ${error.response.status}`,
+          errorID: errorID,
+          status: "error"
+        })
+      }
     }
   } catch (error) {
     console.log(error.response.status)
