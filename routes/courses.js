@@ -85,7 +85,7 @@ router.get("/:id", async (req, res) => {
 
 router.get("/:courseID/assignments", async (req, res) => {
   try {
-    const canvasResults = await axios.get(`${req.user.canvasURL}/api/v1/courses/${req.params.id}`, {
+    const canvasResults = await axios.get(`${req.user.canvasURL}/api/v1/courses/${req.params.courseID}`, {
       headers: {
         'Authorization': `Bearer ${req.user.canvasKey}`
       }
