@@ -175,13 +175,17 @@ router.get("/:courseID/announcements", async (req, res) => {
       })
       var results = []
       for (var result of canvasResults) {
-        result.course = canvasResults.data
+        result.course = courseResults.data
         results.push(result)
       }
       if(canvasResults.status === 200) {
         res.send({
           data: results,
           status: "success"
+        })
+      } else {
+        res.send({
+          error: "unknown"
         })
       }
     } catch (error) {
