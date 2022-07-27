@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
     allAssignments = []
     for(var course of coursesResult.data) {
       try {
-        const courseAssignments = await axios.get(`${req.user.canvasURL}/api/v1/courses/${parseInt(course.id)}/assignments`. {
+        const courseAssignments = await axios.get(`${req.user.canvasURL}/api/v1/courses/${parseInt(course.id)}/assignments`, {
           headers: {
             'Authorization': `Bearer ${req.user.canvasKey}`
           }
