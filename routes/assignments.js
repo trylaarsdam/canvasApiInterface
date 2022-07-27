@@ -22,6 +22,7 @@ router.get("/", async (req, res) => {
           }
         })
         for(var assignment of courseAssignments.data) {
+          assignment.course = course
           allAssignments.push(assignment)
         }
       } catch(error) {
