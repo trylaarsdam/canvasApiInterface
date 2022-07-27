@@ -21,6 +21,7 @@ router.get("/", async (req, res) => {
           allAssignments.push(assignment)
         }
       } catch(error) {
+        console.log(error)
         res.status(502).send({
           status: "error",
           error: "error fetching assignments"
