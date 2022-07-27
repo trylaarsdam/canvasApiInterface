@@ -23,6 +23,10 @@ async function auth(req, res, next) {
   if(users.length === 1) {
     if(users[0].password === password) {
       req.user = users[0];
+
+      if(req.user.banned) {
+        return res.status(401).json({ message: 'User Account Banned', status: "error" });
+      }
       return next();
     }
     else {
