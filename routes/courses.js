@@ -85,17 +85,50 @@ router.get("/:id", async (req, res) => {
 
 router.get("/:courseID/assignments", async (req, res) => {
   try {
-    const canvasResults = await axios.get(`${req.user.canvasURL}/api/v1/courses/${req.params.courseID}/assignments`, {
+    const canvasResults = await axios.get(`${req.user.canvasURL}/api/v1/courses/${req.params.id}`, {
       headers: {
         'Authorization': `Bearer ${req.user.canvasKey}`
       }
     })
 
-    if(canvasResults.status === 200) {
-      res.send({
-        data: canvasResults.data,
-        status: "success"
+    try {
+      const assignmentResults = await axios.get(`${req.user.canvasURL}/api/v1/courses/${req.params.courseID}/assignments`, {
+        headers: {
+          'Authorization': `Bearer ${req.user.canvasKey}`
+        }
       })
+      var results = []
+      for (var assignment of assignmentResults) {
+        assignment.course = canvasResults.data
+        results.push(assignment)
+      }
+      if(assignmentResults.status === 200) {
+        res.send({
+          data: results,
+          status: "success"
+        })
+      }
+    } catch (error) {
+      console.log(error.response.status)
+      if(error.response.status === 401) {
+        let errorID = uuidv4()
+        await log.logError(errorID, req.user.id, error)
+        res.send({
+          message: "api key unauthorized",
+          errorID: errorID,
+          status: "error"
+        })
+      }
+      else {
+        let errorID = uuidv4()
+        await log.logError(errorID, req.user.id, error)
+  
+        res.send({
+          message: `canvas api returned code ${error.response.status}`,
+          errorID: errorID,
+          status: "error"
+        })
+      }
     }
   } catch (error) {
     console.log(error.response.status)
@@ -118,7 +151,8 @@ router.get("/:courseID/assignments", async (req, res) => {
         status: "error"
       })
     }
-  }
+  }  
+
 })
 
 router.get("/:courseID/announcements", async (req, res) => {
