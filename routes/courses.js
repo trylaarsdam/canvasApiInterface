@@ -107,6 +107,11 @@ router.get("/:courseID/assignments", async (req, res) => {
           data: results,
           status: "success"
         })
+      } else {
+        res.send({
+          message: assignmentResults.status,
+          status: "error"
+        })
       }
     } catch (error) {
       console.log(error.response.status)
