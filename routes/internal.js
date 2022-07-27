@@ -157,4 +157,20 @@ router.get("/users", async (req, res) => {
   }
 })
 
+router.get("/errors", async (req, res) => {
+  const users = await db.getCollection("Error")
+
+  if(users) {
+    res.send({
+      users: users,
+      status: "success"
+    })
+  } else {
+    res.send({
+      message: "error fetching users",
+      status: "error"
+    })
+  }
+})
+
 module.exports = router;

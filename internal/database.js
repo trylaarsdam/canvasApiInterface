@@ -27,7 +27,7 @@ async function setDoc(collection, doc, data) {
 
 async function getCollection(collection) {
   try {
-    const query = await db.collection(collection).get();
+    const query = await db.collection(collection).limit(150).get();
     return query.docs.map(doc => doc.data());
   } catch(error) {
     console.log(error);
