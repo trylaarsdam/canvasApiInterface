@@ -123,6 +123,31 @@ router.post("/users/new", async (req, res) => {
   }
 })
 
+router.post("/users/unban/:id", async (req, res) => {
+  if(req.user.id == req.query.id || req.user.role == "Administrator") {
+    const userID = req.query.id
+    const user = await db.getDoc("User", userID)
+
+    if(user) {
+      await db.mergeDoc("User", userID, { banned: false })
+      res.send({
+        status: "success"
+      })
+    } else {
+      res.send({
+        message: "user not found",
+        status: "error"
+      })
+    }
+  } else {
+    req.status(401).send({
+      message: "requires administrator privilages",
+      status: "error"
+    })
+  }
+})
+
+
 router.post("/users/ban/:id", async (req, res) => {
   if(req.user.id == req.query.id || req.user.role == "Administrator") {
     const userID = req.query.id
