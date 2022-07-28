@@ -5,8 +5,13 @@ const db = require("./database")
 async function auth(req, res, next) {
   // make authenticate path public'
   // console.log(req.path)
+
+  let status = (await db.getDoc("System", "status")).data
+
   if(config["unsecured-endpoints"].includes(req.path)) {
-    return next();
+    if(status.adminOnly != true) {
+      return next();
+    }
   }
 
   // check for basic auth header
@@ -27,7 +32,19 @@ async function auth(req, res, next) {
       if(req.user.banned) {
         return res.status(401).json({ message: 'User Account Banned', status: "error" });
       }
-      return next();
+
+      if(status.adminOnly == true) {
+        if(req.user.role == "Administrator") {
+          return next();
+        } else {
+          return res.status(401).send({
+            status: "error",
+            message: "system in admin only mode"
+          })
+        }
+      } else {
+        return next();
+      }
     }
     else {
       return res.status(401).json({ message: 'Invalid Credentials' });
