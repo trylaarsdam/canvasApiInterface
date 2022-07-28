@@ -140,7 +140,7 @@ router.get("/:courseID/:announcementID", async (req, res) => {
       }
     })
 
-    var replies = await axios.get(`${req.user.canvasURL}/api/v1/courses/${req.params.courseID}/discussion_topics/${req.params.announcementID}`, {
+    var replies = await axios.get(`${req.user.canvasURL}/api/v1/courses/${req.params.courseID}/discussion_topics/${req.params.announcementID}/view`, {
       headers: {
         'Authorization': `Bearer ${req.user.canvasKey}`
       }
