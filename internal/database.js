@@ -14,7 +14,16 @@ module.exports = {
   deleteDoc,
   getDoc,
   query,
-  getCollection
+  getCollection,
+  mergeDoc
+}
+
+async function mergeDoc(collection, doc, data) {
+  try {
+    await db.collection(collection).doc(doc).set(data, {merge: true});
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function setDoc(collection, doc, data) {
