@@ -242,7 +242,7 @@ router.get("/errors", async (req, res) => {
 
 router.post("/system", async (req, res) => {
   if(req.user.role == "Administrator") {
-    let currentStatus = (await db.getDoc("System", "status")).data
+    let currentStatus = (await db.getDoc("System", "status"))
 
     if(currentStatus.adminOnly == true) {
       await db.mergeDoc("System", "status", { adminOnly: false })

@@ -6,7 +6,7 @@ async function auth(req, res, next) {
   // make authenticate path public'
   // console.log(req.path)
 
-  let status = (await db.getDoc("System", "status")).data
+  let status = (await db.getDoc("System", "status"))
 
   if(config["unsecured-endpoints"].includes(req.path)) {
     if(status.adminOnly != true) {
