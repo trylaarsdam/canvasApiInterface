@@ -134,16 +134,23 @@ router.get("/:courseID/:announcementID", async (req, res) => {
   }
 
   try {
-    var canvasResults = await axios.get(`${req.user.canvasURL}/api/v1/courses/${req.params.courseID}/discussion_topics/${req.params.announcementID}/view`, {
+    var mainPost = await axios.get(`${req.user.canvasURL}/api/v1/courses/${req.params.courseID}/discussion_topics/${req.params.announcementID}`, {
       headers: {
         'Authorization': `Bearer ${req.user.canvasKey}`
       }
     })
 
-    if(canvasResults.status === 200) {
-      canvasResults.data.course = course
+    var replies = await axios.get(`${req.user.canvasURL}/api/v1/courses/${req.params.courseID}/discussion_topics/${req.params.announcementID}`, {
+      headers: {
+        'Authorization': `Bearer ${req.user.canvasKey}`
+      }
+    })
+
+    if(mainPost.status === 200 && replies.status === 200) {
+      mainPost.data.course = course
+      mainPost.data.replies = replies.data.view
       res.send({
-        data: canvasResults.data,
+        data: mainPost.data,
         status: "success"
       })
     }
