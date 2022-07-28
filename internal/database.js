@@ -19,6 +19,7 @@ module.exports = {
 }
 
 async function mergeDoc(collection, doc, data) {
+  console.log("merge")
   try {
     await db.collection(collection).doc(doc).set(data, {merge: true});
   } catch (error) {
@@ -27,6 +28,7 @@ async function mergeDoc(collection, doc, data) {
 }
 
 async function setDoc(collection, doc, data) {
+  console.log("set")
   try {
     await db.collection(collection).doc(doc).set(data);
   } catch (error) {
@@ -35,6 +37,7 @@ async function setDoc(collection, doc, data) {
 }
 
 async function getCollection(collection) {
+  console.log("getcollection")
   try {
     const query = await db.collection(collection).limit(150).get();
     return query.docs.map(doc => doc.data());
@@ -44,6 +47,7 @@ async function getCollection(collection) {
 }
 
 async function deleteDoc(collection, doc) {
+  console.log("delete")
   try {
     await db.collection(collection).doc(doc).delete();
   } catch (error) {
@@ -52,6 +56,7 @@ async function deleteDoc(collection, doc) {
 }
 
 async function getDoc(collection, doc) {
+  console.log("getdoc")
   try {
     const docRef = await db.collection(collection).doc(doc).get();
     return docRef.data();
@@ -61,6 +66,7 @@ async function getDoc(collection, doc) {
 }
 
 async function query(collection, key, operator, value) {
+  console.log("query")
   try {
     const query = await db.collection(collection).where(key, operator, value).get();
     return query.docs.map(doc => doc.data());
