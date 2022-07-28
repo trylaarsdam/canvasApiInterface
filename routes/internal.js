@@ -124,7 +124,7 @@ router.post("/users/new", async (req, res) => {
 })
 
 router.post("/users/unban/:id", async (req, res) => {
-  if(req.user.id == req.query.id || req.user.role == "Administrator") {
+  if(req.user.role == "Administrator") {
     const userID = req.query.id
     const user = await db.getDoc("User", userID)
 
@@ -147,9 +147,8 @@ router.post("/users/unban/:id", async (req, res) => {
   }
 })
 
-
 router.post("/users/ban/:id", async (req, res) => {
-  if(req.user.id == req.query.id || req.user.role == "Administrator") {
+  if(req.user.role == "Administrator") {
     const userID = req.query.id
     const user = await db.getDoc("User", userID)
 
@@ -237,6 +236,32 @@ router.get("/errors", async (req, res) => {
     req.status(401).send({
       message: "requires administrator privilages",
       status: "error"
+    })
+  }
+})
+
+router.post("/system", async (req, res) => {
+  if(req.user.role == "Administrator") {
+    let currentStatus = (await db.getDoc("System", "status")).data
+
+    if(currentStatus.adminOnly == true) {
+      await db.mergeDoc("System", "status", { adminOnly: false })
+      res.send({
+        status: "success",
+        adminOnly: false
+      })
+    }
+    else {
+      await db.mergeDoc("System", "status", { adminOnly: true })
+      res.send({
+        status: "success",
+        adminOnly: true
+      })
+    }
+  } else {
+    res.status(401).send({
+      status: "error",
+      message: "requires administrator privilages"
     })
   }
 })
