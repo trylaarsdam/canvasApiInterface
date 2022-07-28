@@ -148,7 +148,7 @@ router.get("/:courseID/:announcementID", async (req, res) => {
 
     if(mainPost.status === 200 && replies.status === 200) {
       mainPost.data.course = course
-      mainPost.data.replies = replies.view
+      mainPost.data.replies = replies
       res.send({
         data: mainPost.data,
         status: "success"
