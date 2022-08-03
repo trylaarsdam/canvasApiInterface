@@ -223,7 +223,7 @@ router.get("/errors", async (req, res) => {
 
     if(users) {
       res.send({
-        users: users,
+        errors: users,
         status: "success"
       })
     } else {
