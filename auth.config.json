@@ -3,6 +3,8 @@
     "/internal/users/new",
     "/internal/login",
     "/internal/users/test",
-    "/internal/users/check"
+    "/internal/users/check",
+    "/docs",
+    "/"
   ]
 }

@@ -26,7 +26,7 @@ app.use("/api/discussions", discussionsRoute)
 app.use("/internal", internalRoute);
 
 app.get("/", (req, res) => {
-  res.send("Assignment Canvas v2 API");
+  res.redirect("https://canvas.toddr.org")
 })
 
 app.get("/docs", (req, res) => {
