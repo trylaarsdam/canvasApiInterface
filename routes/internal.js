@@ -6,6 +6,8 @@ const dev = require("../dev.json")
 const log = require("../internal/logging")
 const db = require("../internal/database")
 const crypto = require("crypto")
+const emailCredentials = require("../email.json")
+const nodemailer = require("nodemailer")
 
 router.get("/users/test", async (req, res) => {
   const canvasURL = req.query.canvasURL
@@ -105,7 +107,31 @@ router.post("/users/new", async (req, res) => {
         role: "User",
         apiKey: uuidv4()
       })
-  
+      
+      let transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true, // true for 465, false for other ports
+        auth: {
+          user: "todd@toddr.org", 
+          pass: emailCredentials.password, 
+        },
+      });
+
+      let info = await transporter.sendMail({
+        from: 'admin@toddr.org', // sender address
+        to: email, // list of receivers
+        subject: "Welcome to Assignment Canvas", // Subject line
+        html: `Your account has been successfully created. If you need any help with the service,
+          please contact <a href="mailto:support@toddr.org">support@toddr.org</a>.</p><br/><br/>
+          <hr />
+          <p>This email was sent from a system generated email address. Please do not reply to this email.<br/>
+          You received this email because you signed up for an account at canvas.toddr.org. If you did not sign up for
+          an account, please contact support.
+          </p>
+          `, // html body
+      });
+
       res.send({
         message: "user created",
         status: "success",
