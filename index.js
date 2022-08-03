@@ -29,6 +29,10 @@ app.get("/", (req, res) => {
   res.send("Assignment Canvas v2 API");
 })
 
+app.get("/docs", (req, res) => {
+  res.redirect("https://documenter.getpostman.com/view/8120773/Uzs2ZSCY")
+})
+
 app.listen(7001, () => {
   console.log("AC API listening on port 7001");
 });
